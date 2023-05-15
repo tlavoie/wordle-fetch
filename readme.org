@@ -1,0 +1,17 @@
+* wordle-fetch
+- Basic idea is to re-implement Steve Wart's data fetcher for Wordle,
+  but using nicely parallelized Haskell instead of JavaScript. (Note:
+  Copy of Steve's code is included here as a reference.)
+- Anticipate using:
+  - Network.Wreq for HTTP client library
+  - Date libraries as used in my own mqtt-logger app
+  - 
+- Can start with some basic code from the rainforest app that I had
+  also started previously, using the Wreq library there as well.
+- Using "naive" approach from
+  https://chrisdone.com/posts/measuring-duration-in-haskell/, since
+  we're not too worried about system time changing in the middle of
+  things.
+** DONE Remember to use nix-shell to have zlib available
+** DONE get date range strings in appropriate format
+

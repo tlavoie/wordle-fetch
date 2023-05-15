@@ -7,7 +7,7 @@ import Data.DateTime
 import Data.Maybe (fromJust)
 import Data.Text
 import Network.Wreq
--- import qualified Network.Wreq.Session as S
+import qualified Network.Wreq.Session as S
 import Control.Lens
 --import Data.Aeson (toJSON)
 import Data.Aeson.Lens (_String, key, _Integer)
@@ -17,10 +17,10 @@ dateOffset :: DateTime -> Integer -> String
 dateOffset date dayOffset =
   formatTime defaultTimeLocale "%Y-%m-%d" $ addMinutes (dayOffset * 1440) date
 
-getWordleOfDay :: [Char] -> IO [Char]
-getWordleOfDay dateStr = do
+getWordleOfDay :: S.Session -> [Char] -> IO [Char]
+getWordleOfDay session dateStr = do
   start <- Data.Time.getCurrentTime
-  r <- get ("https://www.nytimes.com/svc/wordle/v2/" ++ dateStr ++ ".json")
+  r <- S.get session ("https://www.nytimes.com/svc/wordle/v2/" ++ dateStr ++ ".json")
   end <- Data.Time.getCurrentTime
 
   let someid = show $ fromJust (r ^? responseBody . key "id" . _Integer)
@@ -36,8 +36,9 @@ main = do
   -- let range = [0 .. 680]  -- full range
   let dateStrList = Prelude.map (dateOffset startDate) range
   mainStart <- Data.Time.getCurrentTime
+  sess <- S.newSession
   -- result <- getWordleOfDay dateStartString
-  result <- mapM getWordleOfDay dateStrList
+  result <- mapM (getWordleOfDay sess) dateStrList
   print result
   -- Prelude.map print Prelude.map getWordleOfDay dateStrList
   mainEnd <- Data.Time.getCurrentTime
