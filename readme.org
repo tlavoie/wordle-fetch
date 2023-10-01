@@ -14,4 +14,11 @@
   things.
 ** DONE Remember to use nix-shell to have zlib available
 ** DONE get date range strings in appropriate format
-
+** DONE fix build failure from newer GHC / libs
+- Current setup is trying to use GHC 9.4.6 instead of 9.0.2 (used
+  previously), and one of the dependencies that worked before has
+  changed and caused breakage. <2023-09-28 Thu>
+  - Data.DateTime was used for dateOffset, but looks like it hasn't
+    kept up with other libraries.
+  - No current version of addMinutes, so I think we need:
+    "addUTCTime nominalDay date" to add one day's offset

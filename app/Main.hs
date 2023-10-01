@@ -3,19 +3,20 @@
 module Main where
 
 import Data.Time
-import Data.DateTime
 import Data.Maybe (fromJust)
 import Data.Text
 import Network.Wreq
 import qualified Network.Wreq.Session as S
 import Control.Lens
---import Data.Aeson (toJSON)
 import Data.Aeson.Lens (_String, key, _Integer)
---import qualified Data.Text as T
 
-dateOffset :: DateTime -> Integer -> String
+-- libraries needed (or anticipated) for concurrency
+-- import Control.Concurrent
+-- import Control.Monad
+
+dateOffset :: UTCTime -> Integer -> String
 dateOffset date dayOffset =
-  formatTime defaultTimeLocale "%Y-%m-%d" $ addMinutes (dayOffset * 1440) date
+  formatTime defaultTimeLocale "%Y-%m-%d" $ addUTCTime (nominalDay * fromInteger dayOffset) date
 
 getWordleOfDay :: S.Session -> [Char] -> IO [Char]
 getWordleOfDay session dateStr = do
@@ -32,7 +33,7 @@ main :: IO ()
 main = do
   let dateStartString = "2021-06-19"
   let startDate = parseTimeOrError True defaultTimeLocale "%Y-%m-%d" dateStartString :: UTCTime
-  let range = [0 .. 9]  -- sample range
+  let range = [0 .. 9] :: [Integer] -- sample range
   -- let range = [0 .. 680]  -- full range
   let dateStrList = Prelude.map (dateOffset startDate) range
   mainStart <- Data.Time.getCurrentTime

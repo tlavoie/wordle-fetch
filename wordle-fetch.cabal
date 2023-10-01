@@ -68,11 +68,11 @@ executable wordle-fetch
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.15.1.0
+    build-depends:    base
                     , wreq
                     , lens
                     , time
-                    , datetime
+--                    , datetime
                     , aeson
                     , lens-aeson
                     , text
@@ -82,3 +82,5 @@ executable wordle-fetch
 
     -- Base language which the package is written in.
     default-language: Haskell2010
+
+
