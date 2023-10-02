@@ -10,9 +10,9 @@ import qualified Network.Wreq.Session as S
 import Control.Lens
 import Data.Aeson.Lens (_String, key, _Integer)
 
--- libraries needed (or anticipated) for concurrency
--- import Control.Concurrent
--- import Control.Monad
+-- libraries needed (or anticipated) for concurrency and parallelism
+import Control.Parallel.Strategies
+import Control.Concurrent.Async
 
 dateOffset :: UTCTime -> Integer -> String
 dateOffset date dayOffset =
@@ -33,15 +33,16 @@ main :: IO ()
 main = do
   let dateStartString = "2021-06-19"
   let startDate = parseTimeOrError True defaultTimeLocale "%Y-%m-%d" dateStartString :: UTCTime
-  let range = [0 .. 9] :: [Integer] -- sample range
-  -- let range = [0 .. 680]  -- full range
-  let dateStrList = Prelude.map (dateOffset startDate) range
+  let range = [0 .. 680] :: [Integer] -- Range to match Steve's example
+
+  -- Not sure if this CPU parallelization buys much, not that costly
+  let dateStrList = parMap rdeepseq (dateOffset startDate) range
   mainStart <- Data.Time.getCurrentTime
   sess <- S.newSession
-  -- result <- getWordleOfDay dateStartString
-  result <- mapM (getWordleOfDay sess) dateStrList
+
+  result <- mapConcurrently (getWordleOfDay sess) dateStrList
+
   print result
-  -- Prelude.map print Prelude.map getWordleOfDay dateStrList
   mainEnd <- Data.Time.getCurrentTime
   putStr "main time, in ms: "
   putStrLn $ show ( floor $ 1000 * diffUTCTime mainEnd mainStart :: Integer)

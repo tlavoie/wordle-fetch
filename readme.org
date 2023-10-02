@@ -1,7 +1,9 @@
 * wordle-fetch
 - Basic idea is to re-implement Steve Wart's data fetcher for Wordle,
   but using nicely parallelized Haskell instead of JavaScript. (Note:
-  Copy of Steve's code is included here as a reference.)
+  Copy of Steve's code is included here as a reference, but the repo
+  is at
+  https://gist.github.com/mandeluna/27e5a8f8add1348e89ee959957d4ba3e)
 - Anticipate using:
   - Network.Wreq for HTTP client library
   - Date libraries as used in my own mqtt-logger app
