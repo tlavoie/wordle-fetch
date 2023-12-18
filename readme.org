@@ -9,7 +9,7 @@
   - Date libraries as used in my own mqtt-logger app
   - 
 - Can start with some basic code from the rainforest app that I had
-  also started previously, using the Wreq library there as well.q
+  also started previously, using the Wreq library there as well.
 - Using "naive" approach from
   https://chrisdone.com/posts/measuring-duration-in-haskell/, since
   we're not too worried about system time changing in the middle of
